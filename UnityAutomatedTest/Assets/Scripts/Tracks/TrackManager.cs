@@ -116,7 +116,7 @@ public class TrackManager : MonoBehaviour
 
     protected bool m_IsTutorial; //Tutorial is a special run that don't chance section until the tutorial step is "validated" by the TutorialState.
 
-    protected bool m_IsEnabled;
+    protected bool m_IsUpdateEnabled;
 
     Vector3 m_CameraOriginalPos = Vector3.zero;
     
@@ -133,13 +133,18 @@ public class TrackManager : MonoBehaviour
     
     protected void Awake()
     {
+        m_IsUpdateEnabled = true;
         m_ScoreAccum = 0.0f;
         s_Instance = this;
     }
 
+    public void DisableTrackManagerUpdate ()
+    {
+        m_IsUpdateEnabled = false;
+    }
+
     public void StartMove(bool isRestart = true)
     {
-        m_IsEnabled = true;
         characterController.StartMoving();
         m_IsMoving = true;
         if (isRestart)
@@ -305,7 +310,7 @@ public class TrackManager : MonoBehaviour
     private int _spawnedSegments = 0;
     void Update()
     {
-        if (!m_IsEnabled) return;
+        if (!m_IsUpdateEnabled) return;
 
         while (_spawnedSegments < (m_IsTutorial ? 4 : k_DesiredSegmentCount))
         {
