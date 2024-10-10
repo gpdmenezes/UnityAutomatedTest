@@ -115,7 +115,9 @@ public class TrackManager : MonoBehaviour
     protected bool m_Rerun;     // This lets us know if we are entering a game over (ads) state or starting a new game (see GameState)
 
     protected bool m_IsTutorial; //Tutorial is a special run that don't chance section until the tutorial step is "validated" by the TutorialState.
-    
+
+    protected bool m_IsEnabled;
+
     Vector3 m_CameraOriginalPos = Vector3.zero;
     
     const float k_FloatingOriginThreshold = 10000f;
@@ -137,6 +139,7 @@ public class TrackManager : MonoBehaviour
 
     public void StartMove(bool isRestart = true)
     {
+        m_IsEnabled = true;
         characterController.StartMoving();
         m_IsMoving = true;
         if (isRestart)
@@ -302,6 +305,8 @@ public class TrackManager : MonoBehaviour
     private int _spawnedSegments = 0;
     void Update()
     {
+        if (!m_IsEnabled) return;
+
         while (_spawnedSegments < (m_IsTutorial ? 4 : k_DesiredSegmentCount))
         {
             StartCoroutine(SpawnNewSegment());
